@@ -36,6 +36,21 @@ public class LogsController : ControllerBase
         
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetLogById(int id)
+    {
+        try
+        {
+            var logs = await _logRepository.GetById(id);
+            return logs.Any() ? Ok(logs) : NotFound(); // Retorna os logs com status 200 ou 404 se não encontrado
+        }
+        catch (Exception ex)
+        {
+            _logger.LogCritical(ex, "Erro ao consultar por ID");
+            return StatusCode(500, "Erro interno ao acessar a base de dados");
+        }
+    }
+
     [HttpPost]
     public async Task<IActionResult> PostLogs([FromForm] LogCreateDto dto) 
     {
@@ -60,21 +75,6 @@ public class LogsController : ControllerBase
 
         // Retorna o log criado com status 201
         return CreatedAtAction(nameof(GetLogs), new { id = novoLog.Id }, novoLog);
-    }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetLogById(int id)
-    {
-        try
-        {
-            var logs = await _logRepository.GetById(id);
-            return logs.Any() ? Ok(logs) : NotFound(); // Retorna os logs com status 200 ou 404 se não encontrado
-        }
-        catch (Exception ex)
-        {
-            _logger.LogCritical(ex, "Erro ao consultar por ID");
-            return StatusCode(500, "Erro interno ao acessar a base de dados");
-        }
     }
 
     [HttpPut("{id}")]

@@ -6,56 +6,66 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. ADICIONA OS SERVIÇOS
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-builder.Services.AddHealthChecks()
-    .AddNpgSql(
-        connectionString, // O C# já sabe que o primeiro texto é a connection string
-        name: "PostgreSQL",
-        tags: new[] { "db", "data", "infra" }
-    );
-
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(); // Isso aqui é o que instala o Swagger
-
-//Interfaces
-builder.Services.AddSingleton<DatabaseConfig>();
-// Registra a classe em si
-builder.Services.AddScoped<LogRepository>();
-// Diz que ILogRepository usa a instância de LogRepository
-builder.Services.AddScoped<ILogRepository>(sp => sp.GetRequiredService<LogRepository>());
-// Diz que IDbInitializer também usa a mesma instância de LogRepository
-builder.Services.AddScoped<IDbInitializer>(sp => sp.GetRequiredService<LogRepository>());
-
-// Configura o Serilog
+// Configura o Serilog logo no início
 Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Information() // Nível mínimo de log (pode ser Debug para mais detalhes)
+    .MinimumLevel.Information()
     .WriteTo.Console()
     .WriteTo.File("logs/monitor-log-.txt", rollingInterval: RollingInterval.Day)
     .CreateLogger();
 
-builder.Host.UseSerilog(); // Diz ao .NET para usar o Serilog em vez do logger padrão
+builder.Host.UseSerilog();
+
+// 1. ADICIONA OS SERVIÇOS
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+// Verificação de segurança: Se a connection string estiver nula, o app vai avisar no log
+if (string.IsNullOrEmpty(connectionString))
+{
+    Log.Error("A ConnectionString 'DefaultConnection' não foi encontrada no appsettings.json!");
+}
+
+builder.Services.AddHealthChecks()
+    .AddNpgSql(connectionString ?? "", name: "PostgreSQL", tags: new[] { "db", "data", "infra" });
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// DI - Interfaces e Repositórios
+builder.Services.AddSingleton<DatabaseConfig>();
+builder.Services.AddScoped<LogRepository>();
+builder.Services.AddScoped<ILogRepository>(sp => sp.GetRequiredService<LogRepository>());
+builder.Services.AddScoped<IDbInitializer>(sp => sp.GetRequiredService<LogRepository>());
 
 var app = builder.Build();
 
-// 1. INICIALIZA O BANCO DE DADOS (Garante que a tabela exista antes de qualquer requisição)
-using (var scope = app.Services.CreateScope())
+// 2. CONFIGURA O PIPELINE (Mova o Swagger para CIMA da inicialização do banco)
+// Assim, se o banco falhar, o Swagger pelo menos tenta abrir
+if (app.Environment.IsDevelopment())
 {
-    // Aqui pede apenas o Initializer, não o repositório completo
-    var initializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
-    initializer.InicializarBanco();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
-
-// 2. CONFIGURA O PIPELINE (O caminho que a requisição faz)
-app.UseSwagger();
-app.UseSwaggerUI();
+// 3. INICIALIZA O BANCO
+using (var scope = app.Services.CreateScope())
+{
+    try
+    {
+        Log.Information("Tentando inicializar o banco de dados...");
+        var initializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+        initializer.InicializarBanco();
+        Log.Information("Banco de dados inicializado com sucesso.");
+    }
+    catch (Exception ex)
+    {
+        // Se o banco falhar, o app LOGA o erro mas NÃO TRAVA a subida do Swagger
+        Log.Error(ex, "Erro ao inicializar o banco de dados. Verifique se o Docker está rodando.");
+    }
+}
 
 app.UseAuthorization();
-
 app.MapHealthChecks("/health");
-app.MapControllers(); // Isso aqui faz o .NET achar o seu LogsController
+app.MapControllers();
 
 app.Run();
