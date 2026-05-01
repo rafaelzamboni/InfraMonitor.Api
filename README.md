@@ -55,7 +55,7 @@ O projeto utiliza o **Docker Compose** para orquestrar os contêineres do Postgr
 
 Na raiz do repositório (junto do arquivo `docker-compose.yml`), crie um arquivo chamado **`.env`** e preencha com as suas senhas:
 ```env
-# Arquivo .env (⚠️ NUNCA commite este arquivo. Ele deve estar no seu .gitignore)
+# Exemplo Arquivo .env
 DB_POSTGRES_USER=postgres
 DB_POSTGRES_PASSWORD=SuaSenhaFortePostgres123!
 DB_SQLSERVER_PASSWORD=SuaSenhaForteSqlServer123!
