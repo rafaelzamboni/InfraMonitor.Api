@@ -32,7 +32,7 @@ Diferente de sistemas com regras de negócio complexas, este projeto adota uma *
 
 Este projeto está em desenvolvimento. As próximas etapas são:
 
-- [ x ] **Conteinerização:** Criação de `docker-compose.yml` para orquestrar a API e as instâncias de bancos de dados.
+- [x] **Conteinerização:** Criação de `docker-compose.yml` para orquestrar a API e as instâncias de bancos de dados.
 - [ ] **Dashboard Visual:** Interface para visualização em tempo real dos status de saúde.
 - [ ] **Alertas Automáticos:** Notificações via Slack ou E-mail em caso de indisponibilidade de serviços.
 
@@ -51,9 +51,12 @@ Abra o seu terminal e execute os comandos abaixo em sequência (lembre-se de con
 git clone [https://github.com/](https://github.com/)[SEU-USUARIO-GITHUB]/InfraMonitor.git
 
 # 2. Subindo a Infraestrutura de Bancos de Dados (Docker)
-O projeto utiliza o **Docker Compose** para orquestrar os contêineres do PostgreSQL (banco principal) e do SQL Server. Para garantir a segurança das credenciais, utilizamos variáveis de ambiente.
+O projeto utiliza o **Docker Compose** para orquestrar os contêineres do PostgreSQL (banco principal) e do SQL Server.
+Para garantir a segurança das credenciais, utilizamos variáveis de ambiente.
 
-Na raiz do repositório (junto do arquivo `docker-compose.yml`), crie um arquivo chamado **`.env`** e preencha com as suas senhas:
+Na raiz do repositório (junto do arquivo `docker-compose.yml`), crie um arquivo chamado **`.env`** e preencha com as suas
+senhas:
+
 ```env
 # Arquivo .env (⚠️ NUNCA commite este arquivo. Adicione-o ao seu .gitignore)
 DB_POSTGRES_USER=postgres
