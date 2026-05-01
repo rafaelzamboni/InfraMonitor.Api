@@ -17,7 +17,7 @@ namespace InfraMonitor.Api.Data
         {
             //Tenta pegar a string de conexão na variável de ambiente se não encontrar utiliza a default 
             var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") 
-                ?? _configuration.GetConnectionString("DefaultConnection");
+                ?? _configuration.GetConnectionString("PostgresConnection");
 
             if (string.IsNullOrEmpty(connectionString))
             {

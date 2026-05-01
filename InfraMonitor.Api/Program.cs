@@ -16,12 +16,12 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 // 1. ADICIONA OS SERVIÇOS
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
 
 // Verificação de segurança: Se a connection string estiver nula, o app vai avisar no log
 if (string.IsNullOrEmpty(connectionString))
 {
-    Log.Error("A ConnectionString 'DefaultConnection' não foi encontrada no appsettings.json!");
+    Log.Error("A ConnectionString 'PostgresConnection' não foi encontrada no appsettings.json!");
 }
 
 builder.Services.AddHealthChecks()
