@@ -15,10 +15,10 @@ Para garantir máxima performance e facilidade de manutenção em uma ferramenta
 
 ## 🚀 Funcionalidades e Diferenciais Técnicos
 
-* **Health Checks Customizados:** Monitoramento de status focado atualmente na prontidão (*Readiness*) e vitalidade (*Liveness*) do banco PostgreSQL.
+* **Health Checks Customizados:** Monitoramento de status focado atualmente na prontidão e vitalidade do banco PostgreSQL.
 * **Observabilidade com Serilog:** Configuração de logs estruturados em arquivos, facilitando o rastreio de falhas e o troubleshooting em produção.
 * **Injeção de Dependência:** Uso extensivo de DI nativo do .NET para garantir desacoplamento entre os controladores e as camadas de dados.
-* **SRE (Site Reliability Engineering):** Preparado para diagnosticar falhas de conectividade sem interromper o serviço principal (12-Factor App methodology).
+* **SRE (Site Reliability Engineering):** Preparado para diagnosticar falhas de conectividade sem interromper o serviço principal.
 
 ## 🛠️ Tecnologias Utilizadas
 
