@@ -42,7 +42,6 @@ Este projeto está em desenvolvimento. As próximas etapas são:
 ### Pré-requisitos
 * [.NET 10 SDK](https://dotnet.microsoft.com/download) instalado.
 * [Docker Desktop](https://www.docker.com/products/docker-desktop/) rodando em background.
-* IDE de sua preferência (recomendado: Visual Studio 2022 ou VS Code).
 
 ### 1. Clonando o Repositório
 Primeiro, baixe o código para a sua máquina e acesse a pasta raiz do projeto:
