@@ -35,7 +35,7 @@ Este projeto está em desenvolvimento. As próximas etapas são:
 
 - [x] **Conteinerização:** Criação de `docker-compose.yml` para orquestrar as instâncias de bancos de dados localmente.
 - [ ] **Dashboard Visual:** Interface para visualização em tempo real dos status de saúde.
-- [ ] **Alertas Automáticos:** Notificações via Slack ou E-mail em caso de indisponibilidade de serviços.
+- [x] **Alertas Automáticos:** Notificações via Slack ou E-mail em caso de indisponibilidade de serviços.
 
 ## ⚙️ Como Executar o Projeto
 
