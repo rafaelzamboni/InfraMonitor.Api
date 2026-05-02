@@ -1,8 +1,14 @@
 using InfraMonitor.Api.Data;
 using InfraMonitor.Api.Data.Interfaces;
 using InfraMonitor.Api.Data.Repositories;
+using InfraMonitor.Api.Services;
+using InfraMonitor.Api.Models;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using DotNetEnv;
 using Serilog;
+
+//Carrega as variáveis do arquivo .env para a memória
+DotNetEnv.Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +44,10 @@ builder.Services.AddSingleton<DatabaseConfig>();
 builder.Services.AddScoped<LogRepository>();
 builder.Services.AddScoped<ILogRepository>(sp => sp.GetRequiredService<LogRepository>());
 builder.Services.AddScoped<IDbInitializer>(sp => sp.GetRequiredService<LogRepository>());
+builder.Services.AddHostedService<HealthMonitorWorker>();
+
+builder.Services.Configure<SmtpSettings>(
+    builder.Configuration.GetSection("SmtpSettings"));
 
 var app = builder.Build();
 
