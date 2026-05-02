@@ -16,16 +16,18 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 // 1. ADICIONA OS SERVIÇOS
-var connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
+var postgresConnection = builder.Configuration.GetConnectionString("PostgresConnection");
+var sqlServerConnection = builder.Configuration.GetConnectionString("SqlServerConnection");
 
 // Verificação de segurança: Se a connection string estiver nula, o app vai avisar no log
-if (string.IsNullOrEmpty(connectionString))
+if (string.IsNullOrEmpty(postgresConnection))
 {
-    Log.Error("A ConnectionString 'PostgresConnection' não foi encontrada no appsettings.json!");
+    Log.Error("A postgresConnection 'PostgresConnection' não foi encontrada no appsettings.json!");
 }
 
 builder.Services.AddHealthChecks()
-    .AddNpgSql(connectionString ?? "", name: "PostgreSQL", tags: new[] { "db", "data", "infra" });
+    .AddNpgSql(postgresConnection, name: "PostgreSQL (Logs)")
+    .AddSqlServer(sqlServerConnection, name: "SQL Server (Legacy)");
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -65,7 +67,6 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseAuthorization();
-app.MapHealthChecks("/health");
 app.MapControllers();
 
 app.Run();
