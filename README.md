@@ -76,7 +76,8 @@ SmtpSettings__Host=sandbox.smtp.mailtrap.io
 SmtpSettings__Port=587
 SmtpSettings__User=SEU_USUARIO_AQUI
 SmtpSettings__Pass=SUA_SENHA_AQUI
-SmtpSettings__ToEmail=seu-email@exemplo.com```
+SmtpSettings__ToEmail=seu-email@exemplo.com
+```
 
 Com o `.env` criado, abra o terminal na raiz do projeto e execute:
 ```bash
