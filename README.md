@@ -24,10 +24,18 @@ Para garantir máxima performance e facilidade de manutenção em uma ferramenta
 
 * **C# 12 / .NET 10 SDK**
 * **Microsoft.Extensions.Diagnostics.HealthChecks**
+* **DotNetEnv**
 * **Serilog** (Structured Logging)
 * **Entity Framework Core / Dapper**
 * **PostgreSQL & SQL Server**
 * **Docker & Docker Compose** (Infraestrutura)
+
+## 📧 Fluxo de Alertas e Notificações
+
+Para evitar envio de e-mails repetitivos. Ele trabalha baseado na Transição de Estado:
+* 🔴 Detecção de Incidente: Assim que um serviço (como o PostgreSQL ou SQL Server) fica indisponível, o sistema dispara um único e-mail de alerta crítico.
+* 🔕 Silêncio Inteligente: Enquanto o serviço permanecer fora do ar, o sistema continuará monitorando em silêncio, sem inundar sua caixa de entrada.
+* 🟢 Notificação de Recuperação: No momento em que o serviço volta ao estado Healthy, um e-mail de resolução é enviado, confirmando que a infraestrutura está operacional novamente.
 
 ## 🛤️ Roadmap de Desenvolvimento (WIP)
 
@@ -61,13 +69,22 @@ DB_POSTGRES_PASSWORD=SuaSenhaFortePostgres123!
 DB_SQLSERVER_PASSWORD=SuaSenhaForteSqlServer123!
 ```
 
+### 3. Configuração MailTrap
+```env
+# Exemplo Configurações do Mailtrap / SMTP
+SmtpSettings__Host=sandbox.smtp.mailtrap.io
+SmtpSettings__Port=587
+SmtpSettings__User=SEU_USUARIO_AQUI
+SmtpSettings__Pass=SUA_SENHA_AQUI
+SmtpSettings__ToEmail=seu-email@exemplo.com```
+
 Com o `.env` criado, abra o terminal na raiz do projeto e execute:
 ```bash
 docker-compose up -d
 ```
 *Aguarde os contêineres iniciarem e verifique o status de "Running" no Docker Desktop.*
 
-### 3. Configurando a API
+### 4. Configurando a API
 Acesse a pasta da API e configure o projeto para enxergar o banco de dados que acabou de subir:
 ```bash
 cd InfraMonitor.Api
@@ -81,7 +98,7 @@ Abra o arquivo `appsettings.json` (e o `appsettings.Development.json`, se existi
   }
 ```
 
-### 4. Rodando a Aplicação
+### 5. Rodando a Aplicação
 Com a infraestrutura no ar e o arquivo `appsettings.json` configurado, execute a aplicação:
 ```bash
 dotnet run
