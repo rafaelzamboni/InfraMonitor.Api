@@ -37,14 +37,6 @@ Para evitar envio de e-mails repetitivos. Ele trabalha baseado na Transição de
 * 🔕 Silêncio Inteligente: Enquanto o serviço permanecer fora do ar, o sistema continuará monitorando em silêncio, sem inundar sua caixa de entrada.
 * 🟢 Notificação de Recuperação: No momento em que o serviço volta ao estado Healthy, um e-mail de resolução é enviado, confirmando que a infraestrutura está operacional novamente.
 
-## 🛤️ Roadmap de Desenvolvimento (WIP)
-
-Este projeto está em desenvolvimento. As próximas etapas são:
-
-- [x] **Conteinerização:** Criação de `docker-compose.yml` para orquestrar as instâncias de bancos de dados localmente.
-- [ ] **Dashboard Visual:** Interface para visualização em tempo real dos status de saúde.
-- [x] **Alertas Automáticos:** Notificações via Slack ou E-mail em caso de indisponibilidade de serviços.
-
 ## ⚙️ Como Executar o Projeto
 
 ### Pré-requisitos
